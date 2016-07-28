@@ -1,0 +1,16 @@
+{
+  "name": "MiniOSC",
+  "keywords":"OSC, udp, websocket, slp, protocol",
+  "description":"A library to handle OSC interfaces through UDP, Websockets, Serial(SLP) etc.",
+  "version": "1.0",
+  "authors": {
+    "name": "Loial Otter",
+  },
+  "frameworks": "arduino",
+  "platforms":"espressif",
+  "dependancies":[
+    {
+      "name": "ESPAsyncUDP-master"
+    }
+  ]
+}
