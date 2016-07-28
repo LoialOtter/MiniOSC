@@ -1,4 +1,4 @@
-#define DEBUG_SLP
+//#define OSC_DEBUG_SLP
 
 #include "SLP_OSC.h"
 #include "crc16.h"
@@ -17,7 +17,7 @@ static void uart0_init(void);
 
 static SLP_OSC_Class *slp_osc_peripheral;
 
-#ifndef DEBUG_SLP
+#ifndef OSC_DEBUG_SLP
 void SLP_OSC_Class::_tx(const char *buffer, size_t len) {
   int i;
   uint16_t crc = crc16(0, (uint8_t*)buffer, len);
@@ -65,7 +65,7 @@ void SLP_OSC_Class::_tx(const char *buffer, size_t len) {
   uart0_Txd('\r');
   uart0_Txd('\n');
 }
-#endif /* DEBUG_SLP */
+#endif /* OSC_DEBUG_SLP */
 
 
 SLP_OSC_Class::SLP_OSC_Class(void) {
@@ -81,7 +81,15 @@ void SLP_OSC_Class::rx(uint8_t *payload, size_t len) {
 
 
 //============================================================================ Lowlevel System ==============================================================================
-typedef enum { MESSAGE_DELIMITER=0, MESSAGE_ENDPOINT, MESSAGE_LENGTH, MESSAGE_DATA, MESSAGE_CRC1, MESSAGE_CRC2, MESSAGE_END } message_section_type;
+typedef enum {
+  MESSAGE_DELIMITER=0,
+  MESSAGE_ENDPOINT,
+  MESSAGE_LENGTH,
+  MESSAGE_DATA,
+  MESSAGE_CRC1,
+  MESSAGE_CRC2,
+  MESSAGE_END
+} message_section_type;
 
 typedef struct {
   // this is used as an overflow for transmitting more than 127 bytes (the peripheral FIFO size)
