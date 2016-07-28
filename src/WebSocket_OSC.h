@@ -3,6 +3,7 @@
 
 
 #include "osc.h"
+#include <WebSocketsServer.h>
 
 class WebsocketOSC_Class: public OSC_Base {
  protected:

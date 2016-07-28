@@ -1,5 +1,4 @@
 #include "WebSocket_OSC.h"
-#include <WebSocketsServer.h>
 
 
 void WebsocketOSC_Class::_tx(const char *buffer, size_t len) {
