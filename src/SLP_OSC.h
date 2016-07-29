@@ -8,7 +8,7 @@ class SLP_OSC_Class: public OSC_Base {
  protected:
   virtual void _tx(const char *buffer, size_t len);
  public:
-  SLP_OSC_Class(void);
+  SLP_OSC_Class(int baudrate = 0);
   void rx(uint8_t *payload, size_t len);
 };
 

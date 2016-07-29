@@ -18,12 +18,12 @@ The path system used for matching OSC addresses supports wildcards in both the o
 All OSC wildcards are supported along with an extra one '**' which indicates to match anything past that point.
 
 Example matches:
-- "**"
+* "**"
 ..* will match any address
-- "/test**"
+* "/test**"
 ..* "/test" will matches
 ..* "/test/foo" will match
-- "/test/**"
+* "/test/**"
 ..* "/test" will not match
 ..* "/test/foo" will match
 
@@ -34,6 +34,14 @@ The search system is written in reasonably tight C with minimal allocation.
 ## Send method
 
 The send method uses va_args (printf-like) which is parsed using the typestring. This means that it's very easy and quite efficient to send messages and requires no structures to be built.
+
+
+## Receive
+
+The library is meant to be lightweight so the message is not copied at all until you need to parse the values from it.
+
+Within the callback from onMessage, you can call "OSC.parseData" on the message to have it allocate and parse the data out. Note that the typestring is still available without calling that.
+After calling parseData, you'll need to call freeData to free the allocated memory.
 
 ---
 

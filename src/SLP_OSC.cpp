@@ -13,7 +13,7 @@
 
 static void uart0_intr_handler(void *para);
 static void uart0_Txd(char c);
-static void uart0_init(void);
+static void uart0_init(int baudrate);
 
 static SLP_OSC_Class *slp_osc_peripheral;
 
@@ -68,8 +68,8 @@ void SLP_OSC_Class::_tx(const char *buffer, size_t len) {
 #endif /* OSC_DEBUG_SLP */
 
 
-SLP_OSC_Class::SLP_OSC_Class(void) {
-  uart0_init();
+SLP_OSC_Class::SLP_OSC_Class(int baudrate) {
+  uart0_init(baudrate);
   slp_osc_peripheral = this;
 }
 
@@ -136,10 +136,12 @@ slp_internal_type slp_int;
 
 void ICACHE_FLASH_ATTR rx_task(os_event_t *events);
 
-static void uart0_init(void) {
-  //_uart.rx_enabled = false;
-  //_uart.tx_enabled = false;
-  //uart_set_debug(UART_NO);
+static void uart0_init(int baudrate) {
+  //if (baudrate > 0) {
+  //  _uart.rx_enabled = false;
+  //  _uart.tx_enabled = false;
+  //  uart_set_debug(UART_NO);
+  //}
   
   ETS_UART_INTR_ATTACH(uart0_intr_handler, 0);
 
@@ -148,12 +150,12 @@ static void uart0_init(void) {
   //Enable TxD pin
   PIN_PULLUP_DIS(PERIPHS_IO_MUX_U0TXD_U);
   PIN_FUNC_SELECT(PERIPHS_IO_MUX_U0TXD_U, FUNC_U0TXD);
-  
-  //Set baud rate and other serial parameters to 115200,n,8,1
-  //uart_div_modify(0, UART_CLK_FREQ/BIT_RATE_115200);
-  //uart_div_modify(0, UART_CLK_FREQ/100000); // 100kbit
-  //uart_div_modify(0, UART_CLK_FREQ/2000000); // 2mbit
-  
+
+  //Set baud rate and other serial parameters to baudrate,n,8,1
+  if (baudrate > 0) {
+    uart_div_modify(0, UART_CLK_FREQ/baudrate);
+  }
+    
   //U0D = (ESP8266_CLOCK / 500000);
   //      1 stop bit   8 data bits     Reset both RX/TX FIFOs
   U0C0 = (1<<UCSBN) | (3<<UCBN) |   (1<<UCRXRST) | (1<<UCTXRST);
